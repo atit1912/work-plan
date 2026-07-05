@@ -178,6 +178,7 @@ table.exec td.tl{text-align:left}
   <div class="spacer"></div>
   <button class="hbtn" onclick="exportJSON()">⬇ สำรองข้อมูล</button>
   <button class="hbtn" onclick="document.getElementById('importFile').click()">⬆ นำเข้าข้อมูล</button>
+  <button class="hbtn" onclick="restoreSeed()">🔄 โหลดข้อมูลตัวอย่าง</button>
   <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
 </header>
 
@@ -347,6 +348,12 @@ async function pullCloud(silent){
     const r = await fetch(SHEET_API_URL+"?t="+Date.now());
     const d = await r.json();
     if(d && Array.isArray(d.tasks)){
+      if(d.tasks.length===0 && tasks.length>0){
+        // ชีทยังว่าง (ตั้งค่าครั้งแรก) — อัพข้อมูลปัจจุบันขึ้นไปตั้งต้นแทนที่จะลบข้อมูลในเครื่องทิ้ง
+        setSync("● ตั้งต้นข้อมูลกลางจากเครื่องนี้...");
+        await pushCloud();
+        return;
+      }
       tasks = d.tasks;
       if(Array.isArray(d.templates) && d.templates.length) templates = d.templates;
       migrate();
@@ -822,6 +829,22 @@ function exportJSON(){
   a.href = URL.createObjectURL(blob);
   a.download = "sheen-plan-backup-"+new Date().toISOString().slice(0,10)+".json";
   a.click();
+}
+function restoreSeed(){
+  if(tasks.length>0){
+    const btn = event && event.target;
+    if(btn && btn.dataset.armed!=="1"){
+      btn.dataset.armed="1"; const old=btn.textContent; btn.textContent="แตะอีกครั้งเพื่อยืนยัน (ข้อมูลปัจจุบันจะถูกแทนที่)";
+      setTimeout(()=>{ if(btn.isConnected){btn.dataset.armed="";btn.textContent=old;} },4000);
+      return;
+    }
+  }
+  tasks = seed();
+  migrate();
+  try{ localStorage.setItem(KEY, JSON.stringify(tasks)); }catch(e){}
+  renderAll();
+  if(SHEET_API_URL){ setSync("● กำลังส่งข้อมูลตัวอย่างขึ้น Sheets..."); pushCloud(); }
+  toast("โหลดข้อมูลตัวอย่างเรียบร้อย");
 }
 function toast(msg){
   let el = document.getElementById("toast");
