@@ -69,19 +69,26 @@ main{max-width:1180px;margin:0 auto;padding:22px 16px 60px}
 .btn-sm{padding:5px 10px;font-size:12.5px}
 
 /* ---------- Task list ---------- */
-.task{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow .15s}
-.task:hover{box-shadow:0 3px 12px rgba(20,38,77,.08)}
-.task .t-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.task .t-name{font-weight:600;font-size:15px;line-height:1.45}
-.task .t-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
-.chip{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:14px;background:var(--grey-bg);color:var(--grey);border:1px solid var(--line)}
-.chip.cat{background:#f0f3fa;color:var(--navy-soft)}
-.st{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:6px;letter-spacing:.3px}
+.task{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--grey-bg);border-radius:var(--radius);padding:15px 17px;margin-bottom:11px;cursor:pointer;transition:box-shadow .15s,transform .15s}
+.task:hover{box-shadow:0 6px 18px rgba(20,38,77,.10);transform:translateY(-1px)}
+.task.acc-done{border-left-color:var(--green)}
+.task.acc-doing{border-left-color:var(--blue)}
+.task.acc-todo{border-left-color:#cbd5e1}
+.task.acc-late{border-left-color:var(--red)}
+.task .t-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.task .t-name{font-weight:600;font-size:15px;line-height:1.45;color:var(--ink)}
+.task .t-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:4px 10px;border-radius:14px;background:var(--grey-bg);color:var(--grey);border:1px solid var(--line)}
+.chip.cat{background:#eef2fc;color:var(--navy-soft);font-weight:600}
+.st{display:inline-block;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:20px;letter-spacing:.2px;flex-shrink:0}
 .st-done{background:var(--green-bg);color:var(--green);border:1px solid #bfe7d0}
 .st-doing{background:var(--blue-bg);color:var(--blue);border:1px solid #c6d8fb}
 .st-todo{background:var(--grey-bg);color:var(--grey);border:1px solid var(--line)}
 .st-late{background:var(--red-bg);color:var(--red);border:1px solid #f3c1c1}
-.mini-prog{font-size:12.5px;color:var(--grey);white-space:nowrap}
+.mini-prog{font-size:12.5px;color:var(--grey);white-space:nowrap;margin-left:auto;font-weight:500}
+.plan-group-head{font-family:'Anuphan';font-weight:700;font-size:14px;color:var(--navy-soft);margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:8px}
+.plan-group-head:first-child{margin-top:0}
+.plan-group-head .cnt{font-family:'IBM Plex Sans Thai';font-weight:400;color:var(--grey);font-size:12.5px}
 
 /* ---------- Modal ---------- */
 .overlay{display:none;position:fixed;inset:0;background:rgba(15,25,50,.45);z-index:50;padding:20px;overflow-y:auto}
@@ -144,14 +151,38 @@ main{max-width:1180px;margin:0 auto;padding:22px 16px 60px}
 .notif .n-sub{font-size:13px;color:var(--grey);margin-top:3px}
 
 /* ---------- Executive summary ---------- */
-.exec-head{text-align:center;margin-bottom:18px}
-.exec-head h2{font-size:20px;color:var(--navy)}
-.exec-head .sub{color:var(--grey);font-size:13.5px;margin-top:4px}
-table.exec{width:100%;border-collapse:collapse;font-size:13.5px}
-table.exec th,table.exec td{border:1px solid var(--line);padding:8px 10px;text-align:center}
-table.exec th{background:var(--navy);color:#fff;font-family:'Anuphan';font-weight:600}
+.exec-banner{background:linear-gradient(120deg,var(--navy),var(--navy-soft));color:#fff;border-radius:14px;padding:26px 28px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden}
+.exec-banner::before{content:"";position:absolute;top:-40%;right:-10%;width:220px;height:220px;background:rgba(255,255,255,.06);border-radius:50%}
+.exec-banner h2{font-size:22px;position:relative}
+.exec-banner .sub{color:#c9d4ec;font-size:13.5px;margin-top:6px;position:relative}
+.exec-banner .badge{display:inline-block;background:#ffd54a;color:#3a2c00;font-weight:700;padding:3px 14px;border-radius:20px;font-size:13px;margin-top:10px;position:relative}
+
+.exec-progress-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:18px}
+.exec-progress-wrap h3{font-size:15px;color:var(--navy);margin-bottom:12px}
+
+.report-table-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:6px;margin-bottom:18px;overflow-x:auto}
+table.exec{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:640px}
+table.exec thead th{background:var(--navy);color:#fff;font-family:'Anuphan';font-weight:600;padding:10px 12px;position:sticky;top:0;text-align:center;white-space:nowrap}
+table.exec thead th:first-child{border-radius:8px 0 0 0;text-align:left}
+table.exec thead th:last-child{border-radius:0 8px 0 0}
+table.exec td{padding:9px 12px;text-align:center;border-bottom:1px solid var(--line);vertical-align:middle}
 table.exec td.tl{text-align:left}
-.exec-note{font-size:13px;color:var(--grey);margin-top:10px}
+table.exec tbody tr:nth-child(even){background:#f8f9fd}
+table.exec tbody tr:hover{background:#eef2fc}
+table.exec .cat-row td{background:#eef2fc;color:var(--navy-soft);font-weight:700;font-size:12.5px;text-align:left;padding:7px 12px;border-bottom:1px solid var(--line)}
+.mini-pill{display:inline-block;width:26px;height:26px;line-height:26px;border-radius:50%;font-size:13px;font-weight:700}
+.mini-pill.done{background:var(--green-bg);color:var(--green)}
+.mini-pill.doing{background:var(--blue-bg);color:var(--blue)}
+.mini-pill.todo{background:var(--grey-bg);color:var(--grey)}
+.mini-pill.late{background:var(--red-bg);color:var(--red)}
+
+.exec-flag-panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:16px}
+.exec-flag-panel h3{font-size:14.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.flag-item{display:flex;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:13.5px}
+.flag-item:last-child{border-bottom:0}
+.flag-item .fname{flex:1}
+.flag-item .fmeta{color:var(--grey);font-size:12.5px;white-space:nowrap}
+.exec-note{font-size:12.5px;color:var(--grey);margin-top:6px;text-align:center}
 
 /* empty state */
 .empty{text-align:center;color:var(--grey);padding:40px 10px;font-size:14px}
@@ -159,9 +190,13 @@ table.exec td.tl{text-align:left}
 @media print{
   header,nav,.toolbar,.no-print{display:none!important}
   main{max-width:100%;padding:0}
-  .panel{border:none;padding:0}
+  .panel,.exec-progress-wrap,.report-table-wrap,.exec-flag-panel{border:none;padding:0;box-shadow:none}
   body{background:#fff}
   .page{display:none}.page#page-exec{display:block!important}
+  .exec-banner{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  table.exec thead th{background:var(--navy)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  table.exec .cat-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .mini-pill,.st{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @media(max-width:640px){
   .bar-row .bl{width:130px}
@@ -235,7 +270,7 @@ table.exec td.tl{text-align:left}
   <div class="toolbar no-print" style="justify-content:flex-end">
     <button class="btn btn-primary" onclick="window.print()">🖨 พิมพ์ / บันทึก PDF</button>
   </div>
-  <div class="panel" id="execArea"></div>
+  <div id="execArea"></div>
 </div>
 
 </main>
@@ -526,23 +561,41 @@ function renderPlan(){
     (!fCat || t.cat===fCat) &&
     (!fSt || taskEff(t)===fSt)
   );
-  document.getElementById("taskList").innerHTML = list.map(t=>{
+
+  const groups = {};
+  list.forEach(t=>{ (groups[t.cat] ||= []).push(t); });
+
+  const cardHTML = t=>{
     const done = Object.values(t.sites).filter(x=>x.status==="done").length;
     const total = Object.keys(t.sites).length;
-    return `<div class="task" onclick="openDetail('${t.id}')">
+    const eff = taskEff(t);
+    return `<div class="task acc-${eff}" onclick="openDetail('${t.id}')">
       <div class="t-top">
         <div class="t-name">${esc(t.name)}</div>
-        ${stChip(taskEff(t))}
+        ${stChip(eff)}
       </div>
       <div class="t-meta">
-        <span class="chip cat">${esc(t.cat)}</span>
         <span class="chip">📅 ${toBE(t.due)}</span>
-        <span class="chip">${esc(t.freq||"-")}</span>
+        <span class="chip">🔁 ${esc(t.freq||"-")}</span>
         ${hasSteps(t)? `<span class="chip">🧩 ${t.steps.length} ขั้นตอน</span>`:""}
         <span class="mini-prog">ศูนย์ที่เสร็จ ${done}/${total}</span>
       </div>
     </div>`;
-  }).join("") || '<div class="empty">ไม่พบแผนงาน — กด "เพิ่มแผนงาน" เพื่อเริ่มต้น</div>';
+  };
+
+  if(!list.length){
+    document.getElementById("taskList").innerHTML = '<div class="empty">ไม่พบแผนงาน — กด "เพิ่มแผนงาน" เพื่อเริ่มต้น</div>';
+    return;
+  }
+
+  // เมื่อกรองตามหมวดอยู่แล้ว ไม่ต้องขึ้นหัวข้อกลุ่มซ้ำ
+  if(fCat){
+    document.getElementById("taskList").innerHTML = list.map(cardHTML).join("");
+    return;
+  }
+  document.getElementById("taskList").innerHTML = Object.entries(groups).map(([cat,arr])=>
+    `<div class="plan-group-head">${esc(cat)} <span class="cnt">(${arr.length} รายการ)</span></div>${arr.map(cardHTML).join("")}`
+  ).join("");
 }
 
 /* ==================== DETAIL ==================== */
@@ -789,14 +842,33 @@ function renderExec(){
   const today = new Date().toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"});
   const lateList = tasks.filter(t=>taskEff(t)==="late");
   const soonList = getNotifs().filter(x=>x.type==="soon");
-
   const sitesInUse = [...new Set(tasks.flatMap(t=>Object.keys(t.sites)))];
 
+  // group tasks by category, preserving first-seen order
+  const groups = {};
+  tasks.forEach(t=>{ (groups[t.cat] ||= []).push(t); });
+
+  const pill = e => `<span class="mini-pill ${e}">${e==="done"?"✓":e==="late"?"!":e==="doing"?"…":"–"}</span>`;
+
+  const tableRows = Object.entries(groups).map(([cat,arr])=>{
+    const catDone = arr.reduce((s,t)=>s+Object.values(t.sites).filter(x=>x.status==="done").length,0);
+    const catTotal = arr.reduce((s,t)=>s+Object.keys(t.sites).length,0);
+    const catPct = catTotal? Math.round(100*catDone/catTotal):0;
+    return `<tr class="cat-row"><td colspan="${2+sitesInUse.length}">${esc(cat)} — ${catPct}% (${catDone}/${catTotal} ศูนย์)</td></tr>` +
+      arr.map(t=>`<tr>
+        <td class="tl">${esc(t.name)}</td>
+        <td>${toBE(t.due)}</td>
+        ${sitesInUse.map(s=> t.sites[s]? `<td>${pill(siteEff(t,s))}</td>` : `<td style="color:var(--line)">—</td>`).join("")}
+      </tr>`).join("");
+  }).join("");
+
   document.getElementById("execArea").innerHTML = `
-    <div class="exec-head">
-      <h2>สรุปผลการดำเนินงานแผนงานด้าน SHE&En ปี ${YEAR_BE}</h2>
+    <div class="exec-banner">
+      <h2>สรุปผลการดำเนินงานแผนงานด้าน SHE&En</h2>
       <div class="sub">ข้อมูล ณ วันที่ ${today}</div>
+      <div class="badge">ปี ${YEAR_BE}</div>
     </div>
+
     <div class="stat-grid">
       <div class="stat"><div class="num">${tasks.length}</div><div class="lbl">แผนงานทั้งหมด</div></div>
       <div class="stat s-green"><div class="num">${counts.done}</div><div class="lbl">เสร็จแล้ว</div></div>
@@ -804,21 +876,32 @@ function renderExec(){
       <div class="stat s-red"><div class="num">${counts.late}</div><div class="lbl">เกินกำหนด</div></div>
       <div class="stat s-green"><div class="num">${pct}%</div><div class="lbl">ความคืบหน้ารวม</div></div>
     </div>
-    <h3 style="margin:14px 0 8px;color:var(--navy)">ตารางสถานะรายกิจกรรม × รายศูนย์</h3>
-    <div style="overflow-x:auto">
-    <table class="exec">
-      <tr><th style="text-align:left">กิจกรรม</th><th>กำหนด</th>${sitesInUse.map(s=>`<th>${esc(s)}</th>`).join("")}</tr>
-      ${tasks.map(t=>`<tr>
-        <td class="tl">${esc(t.name)}<br><span style="font-size:11px;color:var(--grey)">${esc(t.cat)}</span></td>
-        <td>${toBE(t.due)}</td>
-        ${sitesInUse.map(s=> t.sites[s]? `<td>${stChip(siteEff(t,s))}</td>` : "<td>—</td>").join("")}
-      </tr>`).join("")}
-    </table>
+
+    <div class="exec-progress-wrap">
+      <h3>ความคืบหน้าแยกตามหมวดกิจกรรม</h3>
+      ${Object.entries(groups).map(([cat,arr])=>{
+        const d = arr.reduce((s,t)=>s+Object.values(t.sites).filter(x=>x.status==="done").length,0);
+        const tt = arr.reduce((s,t)=>s+Object.keys(t.sites).length,0);
+        return bar(cat, tt? Math.round(100*d/tt):0);
+      }).join("")}
     </div>
-    ${lateList.length? `<h3 style="margin:16px 0 6px;color:var(--red)">⚠ รายการที่เกินกำหนด (${lateList.length})</h3>
-      <ul style="margin-left:20px;font-size:14px">${lateList.map(t=>`<li>${esc(t.name)} — กำหนด ${toBE(t.due)}</li>`).join("")}</ul>`:""}
-    ${soonList.length? `<h3 style="margin:16px 0 6px;color:var(--amber)">⏳ ใกล้ถึงกำหนดใน 30 วัน (${soonList.length})</h3>
-      <ul style="margin-left:20px;font-size:14px">${soonList.map(x=>`<li>${esc(x.t.name)} — อีก ${x.dl} วัน</li>`).join("")}</ul>`:""}
+
+    ${lateList.length? `<div class="exec-flag-panel">
+      <h3 style="color:var(--red)">⚠ รายการที่เกินกำหนด (${lateList.length})</h3>
+      ${lateList.map(t=>`<div class="flag-item"><span class="fname">${esc(t.name)}</span><span class="fmeta">กำหนด ${toBE(t.due)}</span></div>`).join("")}
+    </div>`:""}
+
+    ${soonList.length? `<div class="exec-flag-panel">
+      <h3 style="color:var(--amber)">⏳ ใกล้ถึงกำหนดใน 30 วัน (${soonList.length})</h3>
+      ${soonList.map(x=>`<div class="flag-item"><span class="fname">${esc(x.t.name)}</span><span class="fmeta">อีก ${x.dl} วัน</span></div>`).join("")}
+    </div>`:""}
+
+    <div class="report-table-wrap">
+      <table class="exec">
+        <thead><tr><th>กิจกรรม</th><th>กำหนด</th>${sitesInUse.map(s=>`<th>${esc(s)}</th>`).join("")}</tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
     <div class="exec-note">หมายเหตุ: สถานะ "เกินกำหนด" นับจากงานที่ยังไม่เสร็จเมื่อพ้นเดือนที่กำหนด · จัดทำโดยระบบติดตามแผนงาน SHE&En</div>`;
 }
 
