@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แผนงานด้าน SHE&En</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#14264d;        /* หัวเรื่อง/แถบบน */
+  --navy-soft:#1f3a6e;
+  --ink:#22304a;
+  --paper:#f5f7fb;
+  --card:#ffffff;
+  --line:#e3e8f2;
+  --green:#0f9d58;  --green-bg:#e6f6ee;
+  --amber:#c77700;  --amber-bg:#fdf1dc;
+  --red:#c53030;    --red-bg:#fdeaea;
+  --grey:#64748b;   --grey-bg:#eef1f6;
+  --blue:#2563eb;   --blue-bg:#e8effd;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Thai',sans-serif;background:var(--paper);color:var(--ink);font-size:15px}
+h1,h2,h3,.display{font-family:'Anuphan',sans-serif}
+
+/* ---------- Header ---------- */
+header{background:linear-gradient(120deg,var(--navy),var(--navy-soft));color:#fff;padding:18px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:22px;font-weight:700;letter-spacing:.3px}
+header .year-badge{background:#ffd54a;color:#3a2c00;font-weight:700;padding:3px 12px;border-radius:20px;font-size:14px}
+header .spacer{flex:1}
+header .hbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13.5px}
+header .hbtn:hover{background:rgba(255,255,255,.25)}
+
+/* ---------- Tabs ---------- */
+nav{background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:4px;padding:0 16px;overflow-x:auto}
+nav button{border:0;background:none;padding:13px 16px;font-family:'Anuphan';font-size:15px;font-weight:600;color:var(--grey);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;position:relative}
+nav button.active{color:var(--navy);border-bottom-color:var(--navy)}
+nav button .nbadge{background:var(--red);color:#fff;font-size:11px;border-radius:10px;padding:1px 7px;margin-left:6px;font-family:'IBM Plex Sans Thai'}
+main{max-width:1180px;margin:0 auto;padding:22px 16px 60px}
+.page{display:none}.page.active{display:block}
+
+/* ---------- Cards & stats ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.stat .num{font-size:30px;font-weight:700;font-family:'Anuphan'}
+.stat .lbl{font-size:13px;color:var(--grey);margin-top:2px}
+.stat.s-green .num{color:var(--green)} .stat.s-amber .num{color:var(--amber)}
+.stat.s-red .num{color:var(--red)} .stat.s-blue .num{color:var(--blue)}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:18px}
+.panel h3{font-size:16px;margin-bottom:12px;color:var(--navy)}
+
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-row .bl{width:220px;font-size:13.5px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:14px;background:var(--grey-bg);border-radius:8px;overflow:hidden}
+.bar-fill{height:100%;background:var(--green);border-radius:8px;transition:width .4s}
+.bar-row .bp{width:48px;text-align:right;font-size:13px;font-weight:600}
+
+/* ---------- Toolbar ---------- */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.toolbar input[type=text],.toolbar select{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--card)}
+.toolbar input[type=text]{flex:1;min-width:180px}
+.btn{border:0;border-radius:8px;padding:9px 16px;font-family:'Anuphan';font-weight:600;font-size:14px;cursor:pointer}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy-soft)}
+.btn-ghost{background:var(--grey-bg);color:var(--ink)}.btn-ghost:hover{background:#e2e7f0}
+.btn-danger{background:var(--red-bg);color:var(--red)}
+.btn-sm{padding:5px 10px;font-size:12.5px}
+
+/* ---------- Task list ---------- */
+.task{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow .15s}
+.task:hover{box-shadow:0 3px 12px rgba(20,38,77,.08)}
+.task .t-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.task .t-name{font-weight:600;font-size:15px;line-height:1.45}
+.task .t-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.chip{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:14px;background:var(--grey-bg);color:var(--grey);border:1px solid var(--line)}
+.chip.cat{background:#f0f3fa;color:var(--navy-soft)}
+.st{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:6px;letter-spacing:.3px}
+.st-done{background:var(--green-bg);color:var(--green);border:1px solid #bfe7d0}
+.st-doing{background:var(--blue-bg);color:var(--blue);border:1px solid #c6d8fb}
+.st-todo{background:var(--grey-bg);color:var(--grey);border:1px solid var(--line)}
+.st-late{background:var(--red-bg);color:var(--red);border:1px solid #f3c1c1}
+.mini-prog{font-size:12.5px;color:var(--grey);white-space:nowrap}
+
+/* ---------- Modal ---------- */
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,25,50,.45);z-index:50;padding:20px;overflow-y:auto}
+.overlay.open{display:flex;align-items:flex-start;justify-content:center}
+.modal{background:var(--card);border-radius:14px;max-width:640px;width:100%;padding:22px;margin:20px 0;animation:pop .18s ease}
+@keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.modal h2{font-size:18px;color:var(--navy);margin-bottom:14px;line-height:1.4}
+.f-row{margin-bottom:13px}
+.f-row label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--navy-soft)}
+.f-row input,.f-row select,.f-row textarea{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px}
+.f-row textarea{min-height:80px;resize:vertical}
+.site-checks{display:flex;flex-wrap:wrap;gap:8px}
+.site-checks label{display:flex;align-items:center;gap:5px;font-size:13.5px;font-weight:400;background:var(--grey-bg);padding:6px 11px;border-radius:8px;cursor:pointer;margin:0}
+.m-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+
+/* detail modal — site status rows */
+.site-status-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;flex-wrap:wrap}
+.site-status-row .sname{font-weight:600;font-size:14px}
+.site-status-row select{padding:6px 10px;border-radius:8px;border:1px solid var(--line);font-family:inherit;font-size:13px}
+.detail-kv{font-size:14px;margin-bottom:6px}
+.detail-kv b{color:var(--navy-soft)}
+.note-box{background:var(--paper);border:1px dashed var(--line);border-radius:8px;padding:10px 12px;font-size:13.5px;white-space:pre-wrap;margin:8px 0 14px}
+
+/* ---------- Timeline (ขั้นตอนย่อย) ---------- */
+.tl-wrap{width:100%;margin-top:8px;padding:4px 0 2px 4px;display:none}
+.tl-wrap.open{display:block}
+.tl-step{display:flex;gap:10px;position:relative;padding:0 0 14px 0}
+.tl-step:last-child{padding-bottom:2px}
+.tl-step::before{content:"";position:absolute;left:9px;top:20px;bottom:-2px;width:2px;background:var(--line)}
+.tl-step:last-child::before{display:none}
+.tl-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;z-index:1}
+.tl-step.done .tl-dot{background:var(--green);border-color:var(--green);color:#fff}
+.tl-body{flex:1}
+.tl-name{font-size:13.5px;cursor:pointer}
+.tl-step.done .tl-name{color:var(--green);font-weight:600}
+.tl-date{font-size:11.5px;color:var(--grey)}
+.tl-toggle{background:none;border:0;color:var(--blue);font-family:inherit;font-size:12.5px;cursor:pointer;padding:2px 4px}
+.step-progress{font-size:12px;color:var(--grey)}
+
+.note-edit{width:100%;margin-top:8px;display:none;gap:8px}
+.note-edit.open{display:flex}
+.note-edit input{flex:1;padding:8px 11px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13.5px}
+.form-msg{color:var(--red);font-size:13px;margin-top:6px;min-height:18px}
+
+.step-meta{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.step-meta .sm-name{font-weight:600;font-size:13.5px;margin-bottom:6px}
+.step-meta .sm-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.step-meta input{padding:6px 9px;border:1px solid var(--line);border-radius:7px;font-family:inherit;font-size:12.5px}
+.step-meta input[type=date]{width:140px}
+.step-meta input[type=url]{flex:1;min-width:140px}
+.tl-extra{font-size:11.5px;margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.tl-extra a{color:var(--blue)}
+.tl-extra .odw{color:var(--red);font-weight:600}
+
+/* ---------- Notifications ---------- */
+.notif{border-left:4px solid var(--amber);background:var(--card);border:1px solid var(--line);border-left-width:4px;border-radius:10px;padding:13px 15px;margin-bottom:10px;cursor:pointer}
+.notif.late{border-left-color:var(--red)}
+.notif.soon{border-left-color:var(--amber)}
+.notif .n-title{font-weight:600;font-size:14.5px}
+.notif .n-sub{font-size:13px;color:var(--grey);margin-top:3px}
+
+/* ---------- Executive summary ---------- */
+.exec-head{text-align:center;margin-bottom:18px}
+.exec-head h2{font-size:20px;color:var(--navy)}
+.exec-head .sub{color:var(--grey);font-size:13.5px;margin-top:4px}
+table.exec{width:100%;border-collapse:collapse;font-size:13.5px}
+table.exec th,table.exec td{border:1px solid var(--line);padding:8px 10px;text-align:center}
+table.exec th{background:var(--navy);color:#fff;font-family:'Anuphan';font-weight:600}
+table.exec td.tl{text-align:left}
+.exec-note{font-size:13px;color:var(--grey);margin-top:10px}
+
+/* empty state */
+.empty{text-align:center;color:var(--grey);padding:40px 10px;font-size:14px}
+
+@media print{
+  header,nav,.toolbar,.no-print{display:none!important}
+  main{max-width:100%;padding:0}
+  .panel{border:none;padding:0}
+  body{background:#fff}
+  .page{display:none}.page#page-exec{display:block!important}
+}
+@media(max-width:640px){
+  .bar-row .bl{width:130px}
+  header h1{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📋 แผนงานด้าน SHE&En</h1>
+  <span class="year-badge" id="yearBadge">ปี 2569</span>
+  <span id="syncState" style="font-size:12.5px;color:#cfd8f0"></span>
+  <div class="spacer"></div>
+  <button class="hbtn" onclick="exportJSON()">⬇ สำรองข้อมูล</button>
+  <button class="hbtn" onclick="document.getElementById('importFile').click()">⬆ นำเข้าข้อมูล</button>
+  <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+</header>
+
+<nav>
+  <button class="active" data-page="dash" onclick="goPage('dash')">ภาพรวม</button>
+  <button data-page="plan" onclick="goPage('plan')">แผนงาน</button>
+  <button data-page="notif" onclick="goPage('notif')">แจ้งเตือน <span class="nbadge" id="notifBadge" style="display:none">0</span></button>
+  <button data-page="exec" onclick="goPage('exec')">สรุปผู้บริหาร</button>
+</nav>
+
+<main>
+
+<!-- ================= DASHBOARD ================= -->
+<div class="page active" id="page-dash">
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="panel">
+    <h3>ความคืบหน้าแยกตามหมวดกิจกรรม</h3>
+    <div id="catBars"></div>
+  </div>
+  <div class="panel">
+    <h3>ความคืบหน้าแยกตามศูนย์/หน่วยงาน</h3>
+    <div id="siteBars"></div>
+  </div>
+</div>
+
+<!-- ================= PLAN LIST ================= -->
+<div class="page" id="page-plan">
+  <div class="toolbar">
+    <input type="text" id="q" placeholder="🔍 ค้นหาชื่อแผนงาน..." oninput="renderPlan()">
+    <select id="fCat" onchange="renderPlan()"><option value="">ทุกหมวด</option></select>
+    <select id="fStatus" onchange="renderPlan()">
+      <option value="">ทุกสถานะ</option>
+      <option value="done">เสร็จแล้ว</option>
+      <option value="doing">กำลังดำเนินการ</option>
+      <option value="todo">ยังไม่เริ่ม</option>
+      <option value="late">เกินกำหนด</option>
+    </select>
+    <button class="btn btn-primary" onclick="openForm()">＋ เพิ่มแผนงาน</button>
+  </div>
+  <div id="taskList"></div>
+</div>
+
+<!-- ================= NOTIFICATIONS ================= -->
+<div class="page" id="page-notif">
+  <div class="panel" style="margin-bottom:14px">
+    <h3>⏰ การแจ้งเตือน</h3>
+    <div style="font-size:13px;color:var(--grey)">แจ้งเตือนอัตโนมัติ: งานที่เกินกำหนด และงานที่จะถึงกำหนดภายใน 30 วัน (นับจากวันนี้)</div>
+  </div>
+  <div id="notifList"></div>
+</div>
+
+<!-- ================= EXECUTIVE SUMMARY ================= -->
+<div class="page" id="page-exec">
+  <div class="toolbar no-print" style="justify-content:flex-end">
+    <button class="btn btn-primary" onclick="window.print()">🖨 พิมพ์ / บันทึก PDF</button>
+  </div>
+  <div class="panel" id="execArea"></div>
+</div>
+
+</main>
+
+<!-- ============ FORM MODAL (add/edit) ============ -->
+<div class="overlay" id="formOverlay">
+  <div class="modal">
+    <h2 id="formTitle">เพิ่มแผนงาน</h2>
+    <div class="f-row"><label>ชื่อแผนงาน / กิจกรรม *</label><input id="inName" placeholder="เช่น ตรวจวัดสภาพแวดล้อมในการทำงาน"></div>
+    <div class="f-row"><label>หมวดกิจกรรม *</label>
+      <select id="inCat">
+        <option>ตรวจวัด/บำรุงรักษา</option>
+        <option>รายงาน/ใบอนุญาต</option>
+        <option>การอบรม</option>
+        <option>ความปลอดภัย/สุขภาพ</option>
+        <option>สิ่งแวดล้อม/พลังงาน</option>
+        <option>อื่นๆ</option>
+      </select>
+    </div>
+    <div class="f-row"><label>ศูนย์/หน่วยงานที่รับผิดชอบ *</label><div class="site-checks" id="inSites"></div></div>
+    <div class="f-row"><label>กำหนดแล้วเสร็จ (เดือน/ปี) *</label><input type="month" id="inDue"></div>
+    <div class="f-row"><label>ความถี่</label>
+      <select id="inFreq"><option>ปีละครั้ง</option><option>ทุก 6 เดือน</option><option>รายไตรมาส</option><option>รายเดือน</option><option>ครั้งเดียว</option></select>
+    </div>
+    <div class="f-row"><label>ผู้รับผิดชอบหลัก</label><input id="inOwner" placeholder="เช่น จป.วิชาชีพ / ฝ่ายซ่อมบำรุง"></div>
+    <div class="f-row"><label>รายละเอียด / ข้อกำหนดที่เกี่ยวข้อง</label><textarea id="inDetail" placeholder="เช่น ตามกฎกระทรวง... / เอกสารที่ต้องส่ง"></textarea></div>
+    <div class="f-row"><label>ใช้ Template ขั้นตอนสำเร็จรูป (ไม่บังคับ)</label>
+      <select id="inTemplate" onchange="applyTemplate()">
+        <option value="">— เลือก Template —</option>
+      </select>
+    </div>
+    <div class="f-row"><label>ขั้นตอนย่อย / Timeline (บรรทัดละ 1 ขั้นตอน — เว้นว่างถ้าไม่มี)</label>
+      <textarea id="inSteps" placeholder="เช่น&#10;ขอหนังสือมอบอำนาจ&#10;ยื่นคำขอต่ออายุ&#10;กำหนดวันเข้าตรวจ&#10;รับใบอนุญาตฉบับใหม่"></textarea>
+      <div style="font-size:12px;color:var(--grey);margin-top:4px">ถ้ามีขั้นตอนย่อย สถานะของแต่ละศูนย์จะคำนวณอัตโนมัติจากขั้นตอนที่ติ๊กเสร็จ กำหนดวัน/ลิงก์เอกสารรายขั้นตอนแก้ไขได้ภายหลังจากหน้ารายละเอียด</div>
+    </div>
+    <div class="f-row" style="border-top:1px dashed var(--line);padding-top:12px">
+      <label>บันทึกขั้นตอนด้านบนเป็น Template ใหม่ (ไม่บังคับ)</label>
+      <div style="display:flex;gap:8px">
+        <input id="inTemplateName" placeholder="ตั้งชื่อ Template เช่น ชุดขอ อย.">
+        <button class="btn btn-ghost btn-sm" onclick="saveAsTemplate()">💾 บันทึก Template</button>
+      </div>
+    </div>
+    <div class="form-msg" id="formMsg"></div>
+    <div class="m-actions">
+      <button class="btn btn-ghost" onclick="closeForm()">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="saveForm()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DETAIL MODAL ============ -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal" id="detailBody"></div>
+</div>
+
+<script>
+/* ==================== DATA ==================== */
+/* ====== การเชื่อมต่อ Google Sheets (ไม่บังคับ) ======
+   1) ทำตามขั้นตอนในไฟล์ google-apps-script.gs เพื่อสร้าง Web App
+   2) นำลิงก์ที่ได้ (ลงท้ายด้วย /exec) มาวางในเครื่องหมายคำพูดด้านล่าง
+   3) ทุกศูนย์ที่เปิดหน้านี้จะเห็นและอัพเดทข้อมูลชุดเดียวกัน
+   * ถ้าเว้นว่างไว้ ระบบจะเก็บข้อมูลในเครื่องตามเดิม */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxLhTbMp1Y823CuCv47JWRE_tCOv8oL7ymlCSXPk9gnf9wpw5tTa1Aar3uUzujraIs/exec";
+
+const SITES = ["ศูนย์วิจัยไร่สาม","ศูนย์วิจัยหัวกุญแจ","ศูนย์วิจัยเพชรบุรี","สปป.สัตว์น้ำหาดเจ้า","ศูนย์วิจัยหาดเจ้า"];
+const STATUS = {todo:"ยังไม่เริ่ม",doing:"กำลังดำเนินการ",done:"เสร็จแล้ว"};
+const YEAR_BE = 2569;
+const KEY = "sheen-plan-v1";
+const TKEY = "sheen-templates-v1";
+
+const BUILTIN_TEMPLATES = [
+  {name:"ต่ออายุใบอนุญาต", steps:["ขอหนังสือมอบอำนาจ","ยื่นคำขอต่ออายุ","กำหนดวันเข้าตรวจ / รับการตรวจจากเจ้าหน้าที่","ชำระค่าธรรมเนียม","รับใบอนุญาตฉบับใหม่"]},
+  {name:"จัดอบรม", steps:["ขออนุมัติงบประมาณ/หลักสูตร","ติดต่อวิทยากร/สถาบัน","แจ้งรายชื่อผู้เข้าอบรม","ดำเนินการอบรม","ส่งรายงานผล/เก็บวุฒิบัตร"]},
+  {name:"งาน PM / จ้างเหมา", steps:["ขอใบเสนอราคา","ขออนุมัติ/ออก PO","นัดหมายเข้างาน","ดำเนินงาน PM","ตรวจรับงาน/รับเอกสารรับรอง"]},
+  {name:"ตรวจวัดสภาพแวดล้อม", steps:["จ้างหน่วยตรวจที่ขึ้นทะเบียน","เข้าตรวจวัดหน้างาน","รับผลการตรวจ","ส่งรายงานหน่วยงานราชการ"]},
+];
+function loadTemplates(){
+  try{
+    const raw = localStorage.getItem(TKEY);
+    if(raw){
+      const saved = JSON.parse(raw);
+      const names = saved.map(t=>t.name);
+      return [...saved, ...BUILTIN_TEMPLATES.filter(b=>!names.includes(b.name))];
+    }
+  }catch(e){}
+  return [...BUILTIN_TEMPLATES];
+}
+let templates = loadTemplates();
+function persistTemplates(){ try{ localStorage.setItem(TKEY, JSON.stringify(templates)); }catch(e){} }
+
+/* ---------- Cloud sync (Google Sheets) ---------- */
+let syncTimer = null;
+function setSync(msg){ const el=document.getElementById("syncState"); if(el) el.textContent = msg; }
+function schedulePush(){
+  if(!SHEET_API_URL) return;
+  setSync("● กำลังบันทึก...");
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushCloud, 1200);
+}
+async function pushCloud(){
+  try{
+    await fetch(SHEET_API_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({tasks, templates})});
+    setSync("✓ ซิงก์แล้ว "+new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"}));
+  }catch(e){ setSync("⚠ ซิงก์ไม่สำเร็จ (บันทึกในเครื่องแล้ว)"); }
+}
+async function pullCloud(silent){
+  if(!SHEET_API_URL) return;
+  try{
+    if(!silent) setSync("● กำลังโหลดข้อมูลกลาง...");
+    const r = await fetch(SHEET_API_URL+"?t="+Date.now());
+    const d = await r.json();
+    if(d && Array.isArray(d.tasks)){
+      tasks = d.tasks;
+      if(Array.isArray(d.templates) && d.templates.length) templates = d.templates;
+      migrate();
+      try{ localStorage.setItem(KEY, JSON.stringify(tasks)); }catch(e){}
+      persistTemplates();
+      renderAll();
+    }
+    setSync("✓ ซิงก์แล้ว "+new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"}));
+  }catch(e){ setSync("⚠ ออฟไลน์ — ใช้ข้อมูลในเครื่อง"); }
+}
+
+let tasks = load();
+let editingId = null;
+migrate();
+
+function migrate(){
+  tasks.forEach(t=>{
+    if(!Array.isArray(t.steps)) t.steps = [];
+    t.steps.forEach(sp=>{ if(sp.due===undefined) sp.due=""; if(sp.link===undefined) sp.link=""; });
+    Object.values(t.sites||{}).forEach(st=>{ if(!st.steps) st.steps = {}; });
+  });
+}
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return seed();
+}
+function persist(){
+  try{ localStorage.setItem(KEY, JSON.stringify(tasks)); }catch(e){}
+  schedulePush();
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+function seed(){
+  const mk = (name,cat,sites,due,freq,owner,detail,steps) => ({
+    id:uid(), name, cat, due, freq, owner, detail,
+    steps: (steps||[]).map(n=>({id:uid(),name:n,due:"",link:""})),
+    sites: Object.fromEntries(sites.map(s=>[s,{status:"todo",note:"",updated:null,steps:{}}]))
+  });
+  const LICENSE_STEPS = ["ขอหนังสือมอบอำนาจ","ยื่นคำขอต่ออายุ","กำหนดวันเข้าตรวจ / รับการตรวจจากเจ้าหน้าที่","ชำระค่าธรรมเนียม","รับใบอนุญาตฉบับใหม่"];
+  return [
+    mk("ทำความสะอาด Hood (โรงครัว)","ตรวจวัด/บำรุงรักษา",[SITES[0],SITES[1]],"2025-11","ปีละครั้ง","ฝ่ายซ่อมบำรุง","ทำความสะอาดระบบดูดควันโรงครัว ตรวจสอบพัดลมและท่อระบายอากาศ"),
+    mk("ส่งรายงาน แบบบัญชีรายชื่อสารเคมีอันตราย (สอ.1)","รายงาน/ใบอนุญาต",SITES,"2026-01","ปีละครั้ง","จป.วิชาชีพ","จัดทำบัญชีรายชื่อสารเคมีอันตรายและรายละเอียดข้อมูลความปลอดภัย ส่งกรมสวัสดิการฯ ภายในเดือนมกราคม"),
+    mk("ส่งรายงานแบบแสดงสภาพการจ้างและสภาพการทำงาน (คร.11)","รายงาน/ใบอนุญาต",SITES,"2026-01","ปีละครั้ง","ฝ่ายบุคคล","ส่งรายงานสภาพการจ้าง ภายในเดือนมกราคมของทุกปี"),
+    mk("รายงานผลการปฏิบัติหน้าที่ของ จป.เทคนิค (จป.ท)","รายงาน/ใบอนุญาต",SITES,"2026-01","ทุก 6 เดือน","จป.เทคนิค","รายงานผลการปฏิบัติงานของเจ้าหน้าที่ความปลอดภัยระดับเทคนิคต่ออธิบดีตามกฎหมาย"),
+    mk("ตรวจสุขภาพประจำปี","ความปลอดภัย/สุขภาพ",SITES,"2026-06","ปีละครั้ง","ฝ่ายบุคคล","ตรวจสุขภาพพนักงานประจำปี รวมตรวจตามปัจจัยเสี่ยง"),
+    mk("ตรวจความเสี่ยง 5+1 Major Hazard","ความปลอดภัย/สุขภาพ",SITES,"2026-03","ปีละครั้ง","จป.วิชาชีพ","ประเมินความเสี่ยงอันตรายหลัก 5+1 ด้าน พร้อมจัดทำแผนควบคุม"),
+    mk("PM หม้อแปลงไฟฟ้า","ตรวจวัด/บำรุงรักษา",SITES,"2026-04","ปีละครั้ง","ฝ่ายซ่อมบำรุง","บำรุงรักษาหม้อแปลงไฟฟ้าประจำปี โดยผู้รับเหมาที่ได้รับอนุญาต"),
+    mk("PM Generator","ตรวจวัด/บำรุงรักษา",SITES,"2026-04","ปีละครั้ง","ฝ่ายซ่อมบำรุง","บำรุงรักษาเครื่องกำเนิดไฟฟ้าสำรอง ทดสอบการทำงาน"),
+    mk("อบรมดับเพลิงขั้นต้นและอพยพหนีไฟ","การอบรม",SITES,"2026-08","ปีละครั้ง","จป.วิชาชีพ","อบรมดับเพลิงขั้นต้น (ไม่น้อยกว่า 40% ของพนักงาน) และซ้อมอพยพหนีไฟประจำปี"),
+    mk("อบรมการปฐมพยาบาลเบื้องต้น CPR","การอบรม",SITES,"2026-07","ปีละครั้ง","ฝ่ายบุคคล","อบรมปฐมพยาบาลและการช่วยฟื้นคืนชีพเบื้องต้น"),
+    mk("ตรวจวัดสภาพแวดล้อมในการทำงาน","ตรวจวัด/บำรุงรักษา",SITES,"2026-05","ปีละครั้ง","จป.วิชาชีพ","ตรวจวัดแสง เสียง ความร้อน สารเคมีในพื้นที่ทำงาน โดยหน่วยงานที่ขึ้นทะเบียน"),
+    mk("ตรวจรับรองระบบไฟฟ้าและบริภัณฑ์ไฟฟ้า","ตรวจวัด/บำรุงรักษา",SITES,"2026-02","ปีละครั้ง","วิศวกรไฟฟ้า","ตรวจรับรองระบบไฟฟ้าประจำปีโดยวิศวกร พร้อมจัดเก็บเอกสารรับรอง"),
+    mk("ตรวจคุณภาพน้ำ","ตรวจวัด/บำรุงรักษา",SITES,"2026-06","ทุก 6 เดือน","ฝ่ายสิ่งแวดล้อม","เก็บตัวอย่างน้ำใช้/น้ำทิ้ง ส่งตรวจห้องปฏิบัติการ"),
+    mk("ต่ออายุใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ","รายงาน/ใบอนุญาต",SITES,"2026-09","ปีละครั้ง","ฝ่ายธุรการ","ยื่นต่ออายุใบอนุญาตกับเทศบาล/อบต. ก่อนหมดอายุ",LICENSE_STEPS),
+    mk("ต่ออายุใบอนุญาตทิ้งน้ำ","รายงาน/ใบอนุญาต",SITES,"2026-10","ปีละครั้ง","ฝ่ายสิ่งแวดล้อม","ต่ออายุใบอนุญาตระบายน้ำทิ้ง",LICENSE_STEPS),
+    mk("ต่ออายุใบอนุญาตให้ผลิตพลังงานควบคุม","รายงาน/ใบอนุญาต",SITES,"2026-11","ปีละครั้ง","วิศวกรไฟฟ้า","ต่ออายุใบอนุญาต พค.2 สำหรับเครื่องกำเนิดไฟฟ้า",LICENSE_STEPS),
+    mk("กำจัดขยะอันตราย","ความปลอดภัย/สุขภาพ",SITES,"2026-12","รายไตรมาส","ฝ่ายสิ่งแวดล้อม","รวบรวมและส่งกำจัดของเสียอันตรายกับผู้รับกำจัดที่ได้รับอนุญาต พร้อมเก็บ Manifest"),
+    mk("อบรมหลักสูตรบริหารความเสี่ยงด้านยานยนต์","การอบรม",SITES,"2026-09","ปีละครั้ง","ฝ่ายบุคคล","อบรมขับขี่ปลอดภัยสำหรับพนักงานขับรถ"),
+  ];
+}
+
+/* ==================== HELPERS ==================== */
+function toBEfull(iso){ if(!iso) return "-"; const d=new Date(iso); const th=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."]; return d.getDate()+" "+th[d.getMonth()]+" "+(d.getFullYear()+543); }
+function saveStepMeta(taskId, stepId){
+  const t = tasks.find(x=>x.id===taskId); if(!t) return;
+  const sp = t.steps.find(x=>x.id===stepId); if(!sp) return;
+  sp.due = document.getElementById("sd-"+stepId).value;
+  sp.link = document.getElementById("sl-"+stepId).value.trim();
+  persist(); openDetail(taskId); renderAll();
+}
+function toBE(ym){ if(!ym) return "-"; const [y,m]=ym.split("-"); const th=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."]; return th[+m-1]+" "+(+y+543); }
+function dueDate(t){ const [y,m]=t.due.split("-"); return new Date(+y, +m, 0); } // last day of month
+function daysLeft(t){ return Math.ceil((dueDate(t) - new Date())/86400000); }
+function siteEff(t,s){ // effective status incl. overdue
+  const st = t.sites[s].status;
+  if(st!=="done" && daysLeft(t)<0) return "late";
+  return st;
+}
+function taskEff(t){ // worst status across sites
+  const arr = Object.keys(t.sites).map(s=>siteEff(t,s));
+  if(arr.every(x=>x==="done")) return "done";
+  if(arr.includes("late")) return "late";
+  if(arr.includes("doing")) return "doing";
+  return "todo";
+}
+function hasSteps(t){ return Array.isArray(t.steps) && t.steps.length>0; }
+function stepDoneCount(t,s){
+  const rec = t.sites[s].steps || {};
+  return t.steps.filter(sp=>rec[sp.id]?.done).length;
+}
+function syncSiteStatus(t,s){
+  if(!hasSteps(t)) return;
+  const d = stepDoneCount(t,s);
+  const st = t.sites[s];
+  st.status = d===0 ? "todo" : d===t.steps.length ? "done" : "doing";
+}
+function pctDone(t){ const v=Object.values(t.sites); return v.length? Math.round(100*v.filter(x=>x.status==="done").length/v.length):0; }
+const stChip = e => ({done:'<span class="st st-done">เสร็จแล้ว</span>',doing:'<span class="st st-doing">กำลังดำเนินการ</span>',todo:'<span class="st st-todo">ยังไม่เริ่ม</span>',late:'<span class="st st-late">เกินกำหนด</span>'}[e]);
+const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ==================== NAV ==================== */
+function goPage(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
+  renderAll();
+}
+
+/* ==================== DASHBOARD ==================== */
+function renderDash(){
+  const total = tasks.length;
+  const counts = {done:0,doing:0,todo:0,late:0};
+  tasks.forEach(t=>counts[taskEff(t)]++);
+  const allCells = tasks.flatMap(t=>Object.keys(t.sites).map(s=>siteEff(t,s)));
+  const pct = allCells.length? Math.round(100*allCells.filter(x=>x==="done").length/allCells.length) : 0;
+
+  document.getElementById("statGrid").innerHTML = `
+    <div class="stat"><div class="num">${total}</div><div class="lbl">แผนงานทั้งหมด</div></div>
+    <div class="stat s-green"><div class="num">${counts.done}</div><div class="lbl">เสร็จแล้ว</div></div>
+    <div class="stat s-blue"><div class="num">${counts.doing}</div><div class="lbl">กำลังดำเนินการ</div></div>
+    <div class="stat"><div class="num">${counts.todo}</div><div class="lbl">ยังไม่เริ่ม</div></div>
+    <div class="stat s-red"><div class="num">${counts.late}</div><div class="lbl">เกินกำหนด</div></div>
+    <div class="stat s-green"><div class="num">${pct}%</div><div class="lbl">ความคืบหน้ารวม (รายศูนย์)</div></div>`;
+
+  // by category
+  const cats = {};
+  tasks.forEach(t=>{
+    const c = cats[t.cat] ||= {done:0,total:0};
+    Object.keys(t.sites).forEach(s=>{ c.total++; if(t.sites[s].status==="done") c.done++; });
+  });
+  document.getElementById("catBars").innerHTML = Object.entries(cats).map(([c,v])=>{
+    const p = v.total? Math.round(100*v.done/v.total):0;
+    return bar(c,p);
+  }).join("") || '<div class="empty">ยังไม่มีข้อมูล</div>';
+
+  // by site
+  const sites = {};
+  tasks.forEach(t=>Object.keys(t.sites).forEach(s=>{
+    const o = sites[s] ||= {done:0,total:0};
+    o.total++; if(t.sites[s].status==="done") o.done++;
+  }));
+  document.getElementById("siteBars").innerHTML = Object.entries(sites).map(([s,v])=>{
+    const p = v.total? Math.round(100*v.done/v.total):0;
+    return bar(s,p);
+  }).join("") || '<div class="empty">ยังไม่มีข้อมูล</div>';
+}
+function bar(label,p){
+  const col = p===100? "var(--green)" : p>=50? "#3b82f6" : "#f59e0b";
+  return `<div class="bar-row"><div class="bl" title="${esc(label)}">${esc(label)}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${col}"></div></div>
+    <div class="bp">${p}%</div></div>`;
+}
+
+/* ==================== PLAN LIST ==================== */
+function renderPlan(){
+  // fill category filter
+  const fc = document.getElementById("fCat");
+  const cur = fc.value;
+  const cats = [...new Set(tasks.map(t=>t.cat))];
+  fc.innerHTML = '<option value="">ทุกหมวด</option>'+cats.map(c=>`<option ${c===cur?"selected":""}>${esc(c)}</option>`).join("");
+
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const fCat = fc.value, fSt = document.getElementById("fStatus").value;
+  const list = tasks.filter(t=>
+    (!q || t.name.toLowerCase().includes(q)) &&
+    (!fCat || t.cat===fCat) &&
+    (!fSt || taskEff(t)===fSt)
+  );
+  document.getElementById("taskList").innerHTML = list.map(t=>{
+    const done = Object.values(t.sites).filter(x=>x.status==="done").length;
+    const total = Object.keys(t.sites).length;
+    return `<div class="task" onclick="openDetail('${t.id}')">
+      <div class="t-top">
+        <div class="t-name">${esc(t.name)}</div>
+        ${stChip(taskEff(t))}
+      </div>
+      <div class="t-meta">
+        <span class="chip cat">${esc(t.cat)}</span>
+        <span class="chip">📅 ${toBE(t.due)}</span>
+        <span class="chip">${esc(t.freq||"-")}</span>
+        ${hasSteps(t)? `<span class="chip">🧩 ${t.steps.length} ขั้นตอน</span>`:""}
+        <span class="mini-prog">ศูนย์ที่เสร็จ ${done}/${total}</span>
+      </div>
+    </div>`;
+  }).join("") || '<div class="empty">ไม่พบแผนงาน — กด "เพิ่มแผนงาน" เพื่อเริ่มต้น</div>';
+}
+
+/* ==================== DETAIL ==================== */
+function openDetail(id){
+  const t = tasks.find(x=>x.id===id); if(!t) return;
+  const dl = daysLeft(t);
+  const dueTxt = dl<0? `เกินกำหนด ${-dl} วัน` : `เหลืออีก ${dl} วัน`;
+  document.getElementById("detailBody").innerHTML = `
+    <h2>${esc(t.name)}</h2>
+    <div class="t-meta" style="margin-bottom:12px">
+      <span class="chip cat">${esc(t.cat)}</span>
+      <span class="chip">📅 กำหนด ${toBE(t.due)} (${dueTxt})</span>
+      <span class="chip">${esc(t.freq||"-")}</span>
+      ${stChip(taskEff(t))}
+    </div>
+    <div class="detail-kv"><b>ผู้รับผิดชอบหลัก:</b> ${esc(t.owner||"-")}</div>
+    <div class="detail-kv"><b>รายละเอียด:</b></div>
+    <div class="note-box">${esc(t.detail||"—")}</div>
+    <div class="detail-kv" style="margin-bottom:8px"><b>สถานะรายศูนย์:</b> (เลือกเพื่ออัพเดทได้ทันที)</div>
+    ${hasSteps(t)? `<div style="font-size:12.5px;color:var(--grey);margin-bottom:8px">งานนี้มีขั้นตอนย่อย ${t.steps.length} ขั้นตอน — สถานะของแต่ละศูนย์คำนวณอัตโนมัติจากขั้นตอนที่ติ๊กเสร็จ</div>
+    <div class="detail-kv" style="margin-top:4px"><b>กำหนดวัน / ลิงก์เอกสารรายขั้นตอน</b> <span style="font-weight:400;color:var(--grey)">(ใช้ร่วมกันทุกศูนย์)</span></div>
+    ${t.steps.map(sp=>`<div class="step-meta">
+      <div class="sm-name">${esc(sp.name)}</div>
+      <div class="sm-row">
+        <input type="date" id="sd-${sp.id}" value="${sp.due||""}" title="กำหนดวันดำเนินการ">
+        <input type="url" id="sl-${sp.id}" value="${esc(sp.link||"")}" placeholder="ลิงก์เอกสาร (Google Drive ฯลฯ)">
+        <button class="btn btn-ghost btn-sm" onclick="saveStepMeta('${t.id}','${sp.id}')">บันทึก</button>
+      </div>
+    </div>`).join("")}
+    ` : ""}
+    ${Object.keys(t.sites).map((s,idx)=>{
+      const st = t.sites[s];
+      const withSteps = hasSteps(t);
+      const dc = withSteps? stepDoneCount(t,s) : 0;
+      const control = withSteps
+        ? `<span class="step-progress">${dc}/${t.steps.length} ขั้นตอน</span>
+           <button class="tl-toggle" onclick="toggleTL(event,'tl-${idx}')">▾ ดูขั้นตอน</button>`
+        : `<select onchange="setStatus('${t.id}','${esc(s)}',this.value)">
+            ${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${st.status===k?"selected":""}>${v}</option>`).join("")}
+          </select>`;
+      const timeline = withSteps? `<div class="tl-wrap" id="tl-${idx}">
+        ${t.steps.map((sp,n)=>{
+          const rec = (st.steps||{})[sp.id] || {};
+          const stepLate = !rec.done && sp.due && (new Date(sp.due) < new Date(new Date().toDateString()));
+          const extras = [];
+          if(sp.due) extras.push(`<span class="${stepLate?"odw":""}">${stepLate?"⚠ เลยกำหนด ":"📅 กำหนด "}${toBEfull(sp.due)}</span>`);
+          if(sp.link) extras.push(`<a href="${esc(sp.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 เปิดเอกสาร</a>`);
+          return `<div class="tl-step ${rec.done?"done":""}">
+            <div class="tl-dot" onclick="toggleStep('${t.id}','${esc(s)}','${sp.id}','tl-${idx}')">${rec.done?"✓":n+1}</div>
+            <div class="tl-body">
+              <div class="tl-name" onclick="toggleStep('${t.id}','${esc(s)}','${sp.id}','tl-${idx}')">${esc(sp.name)}</div>
+              <div class="tl-date">${rec.done? "เสร็จเมื่อ "+rec.date : "ยังไม่ดำเนินการ — คลิกเพื่อติ๊กเสร็จ"}</div>
+              ${extras.length? `<div class="tl-extra">${extras.join("")}</div>`:""}
+            </div>
+          </div>`;
+        }).join("")}
+      </div>` : "";
+      return `<div class="site-status-row">
+        <div style="flex:1;min-width:180px">
+          <div class="sname">${esc(s)}</div>
+          <div style="font-size:12px;color:var(--grey)">${st.updated? "อัพเดทล่าสุด "+st.updated : "ยังไม่มีการอัพเดท"}${st.note? " · 📝 "+esc(st.note):""}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          ${stChip(siteEff(t,s))}
+          ${control}
+          <button class="btn btn-ghost btn-sm" onclick="toggleNote(event,'ne-${idx}')">📝 โน้ต</button>
+        </div>
+        <div class="note-edit" id="ne-${idx}">
+          <input id="ne-in-${idx}" placeholder="พิมพ์บันทึกเพิ่มเติม..." value="${esc(st.note||"")}">
+          <button class="btn btn-primary btn-sm" onclick="saveNote('${t.id}','${esc(s)}','ne-in-${idx}')">บันทึก</button>
+        </div>
+        ${timeline}
+      </div>`;
+    }).join("")}
+    <div class="m-actions">
+      <button class="btn btn-danger" onclick="delTask('${t.id}',this)">ลบแผนงาน</button>
+      <button class="btn btn-ghost" onclick="openForm('${t.id}')">✏ แก้ไขรายละเอียด</button>
+      <button class="btn btn-primary" onclick="closeDetail()">ปิด</button>
+    </div>`;
+  document.getElementById("detailOverlay").classList.add("open");
+}
+function closeDetail(){ document.getElementById("detailOverlay").classList.remove("open"); }
+function setStatus(id,site,val){
+  const t = tasks.find(x=>x.id===id); if(!t) return;
+  t.sites[site].status = val;
+  t.sites[site].updated = new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"2-digit"});
+  persist(); openDetail(id); renderAll();
+}
+function toggleTL(ev,elId){
+  ev.stopPropagation();
+  const el = document.getElementById(elId);
+  el.classList.toggle("open");
+  ev.target.textContent = el.classList.contains("open")? "▴ ซ่อนขั้นตอน" : "▾ ดูขั้นตอน";
+}
+function toggleStep(id,site,stepId,tlId){
+  const t = tasks.find(x=>x.id===id); if(!t) return;
+  const st = t.sites[site];
+  st.steps = st.steps || {};
+  const cur = st.steps[stepId];
+  if(cur?.done){ delete st.steps[stepId]; }
+  else{ st.steps[stepId] = {done:true, date:new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"2-digit"})}; }
+  st.updated = new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"2-digit"});
+  syncSiteStatus(t,site);
+  persist(); openDetail(id); renderAll();
+  const el = document.getElementById(tlId);
+  if(el){ el.classList.add("open"); const b=el.parentElement.querySelector(".tl-toggle"); if(b) b.textContent="▴ ซ่อนขั้นตอน"; }
+}
+function toggleNote(ev,elId){
+  ev.stopPropagation();
+  const el = document.getElementById(elId);
+  el.classList.toggle("open");
+  if(el.classList.contains("open")) el.querySelector("input").focus();
+}
+function saveNote(id,site,inputId){
+  const t = tasks.find(x=>x.id===id); if(!t) return;
+  t.sites[site].note = document.getElementById(inputId).value.trim();
+  t.sites[site].updated = new Date().toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"2-digit"});
+  persist(); openDetail(id); renderAll();
+}
+function delTask(id, btn){
+  if(btn && btn.dataset.armed!=="1"){
+    btn.dataset.armed="1"; btn.textContent="แตะอีกครั้งเพื่อยืนยันลบ";
+    setTimeout(()=>{ if(btn.isConnected){btn.dataset.armed="";btn.textContent="ลบแผนงาน";} },3000);
+    return;
+  }
+  tasks = tasks.filter(t=>t.id!==id); persist(); closeDetail(); renderAll();
+}
+
+/* ==================== FORM ==================== */
+function openForm(id){
+  closeDetail();
+  editingId = id||null;
+  const t = id? tasks.find(x=>x.id===id) : null;
+  document.getElementById("formTitle").textContent = t? "แก้ไขแผนงาน" : "เพิ่มแผนงาน";
+  document.getElementById("inName").value = t? t.name : "";
+  document.getElementById("inCat").value = t? t.cat : "ตรวจวัด/บำรุงรักษา";
+  document.getElementById("inDue").value = t? t.due : "";
+  document.getElementById("inFreq").value = t? (t.freq||"ปีละครั้ง") : "ปีละครั้ง";
+  document.getElementById("inOwner").value = t? (t.owner||"") : "";
+  document.getElementById("inDetail").value = t? (t.detail||"") : "";
+  document.getElementById("inSteps").value = t && hasSteps(t)? t.steps.map(sp=>sp.name).join("\n") : "";
+  const tplSel = document.getElementById("inTemplate");
+  tplSel.innerHTML = '<option value="">— เลือก Template —</option>'+templates.map((tp,i)=>`<option value="${i}">${esc(tp.name)}</option>`).join("");
+  document.getElementById("inTemplateName").value = "";
+  const chosen = t? Object.keys(t.sites) : [];
+  document.getElementById("inSites").innerHTML = SITES.map(s=>
+    `<label><input type="checkbox" value="${esc(s)}" ${chosen.includes(s)?"checked":""}> ${esc(s)}</label>`).join("");
+  document.getElementById("formMsg").textContent="";
+  document.getElementById("formOverlay").classList.add("open");
+}
+function closeForm(){ document.getElementById("formOverlay").classList.remove("open"); }
+function applyTemplate(){
+  const i = document.getElementById("inTemplate").value;
+  if(i==="") return;
+  const tp = templates[+i]; if(!tp) return;
+  document.getElementById("inSteps").value = tp.steps.join("\n");
+}
+function saveAsTemplate(){
+  const name = document.getElementById("inTemplateName").value.trim();
+  const steps = document.getElementById("inSteps").value.split("\n").map(x=>x.trim()).filter(Boolean);
+  const msg = document.getElementById("formMsg");
+  if(!name){ msg.textContent = "⚠ กรุณาตั้งชื่อ Template ก่อนบันทึก"; return; }
+  if(!steps.length){ msg.textContent = "⚠ กรุณากรอกขั้นตอนย่อยก่อนบันทึกเป็น Template"; return; }
+  templates = templates.filter(t=>t.name!==name);
+  templates.push({name, steps});
+  persistTemplates();
+  const tplSel = document.getElementById("inTemplate");
+  tplSel.innerHTML = '<option value="">— เลือก Template —</option>'+templates.map((tp,i)=>`<option value="${i}">${esc(tp.name)}</option>`).join("");
+  document.getElementById("inTemplateName").value = "";
+  msg.style.color = "var(--green)"; msg.textContent = "✓ บันทึก Template \""+name+"\" แล้ว";
+  setTimeout(()=>{ msg.textContent=""; msg.style.color="var(--red)"; },2500);
+}
+function saveForm(){
+  const name = document.getElementById("inName").value.trim();
+  const due = document.getElementById("inDue").value;
+  const sites = [...document.querySelectorAll("#inSites input:checked")].map(x=>x.value);
+  const msg = document.getElementById("formMsg");
+  if(!name){ msg.textContent="⚠ กรุณากรอกชื่อแผนงาน"; return; }
+  if(!due){ msg.textContent="⚠ กรุณาเลือกกำหนดแล้วเสร็จ"; return; }
+  if(!sites.length){ msg.textContent="⚠ กรุณาเลือกศูนย์อย่างน้อย 1 แห่ง"; return; }
+  msg.textContent="";
+  const base = {
+    name, due,
+    cat: document.getElementById("inCat").value,
+    freq: document.getElementById("inFreq").value,
+    owner: document.getElementById("inOwner").value.trim(),
+    detail: document.getElementById("inDetail").value.trim(),
+  };
+  const stepNames = document.getElementById("inSteps").value.split("\n").map(x=>x.trim()).filter(Boolean);
+  if(editingId){
+    const t = tasks.find(x=>x.id===editingId);
+    Object.assign(t, base);
+    // rebuild steps: keep id (and per-site progress) for steps whose name unchanged
+    const oldSteps = t.steps||[];
+    t.steps = stepNames.map(n=>{
+      const old = oldSteps.find(sp=>sp.name===n);
+      return old || {id:uid(), name:n, due:"", link:""};
+    });
+    // keep existing status; add new sites, drop removed
+    const newSites = {};
+    sites.forEach(s=> newSites[s] = t.sites[s] || {status:"todo",note:"",updated:null,steps:{}});
+    t.sites = newSites;
+    Object.keys(t.sites).forEach(s=>syncSiteStatus(t,s));
+  }else{
+    const t = { id:uid(), ...base,
+      steps: stepNames.map(n=>({id:uid(),name:n,due:"",link:""})),
+      sites: Object.fromEntries(sites.map(s=>[s,{status:"todo",note:"",updated:null,steps:{}}])) };
+    tasks.push(t);
+  }
+  persist(); closeForm(); renderAll();
+}
+
+/* ==================== NOTIFICATIONS ==================== */
+function getNotifs(){
+  const out = [];
+  tasks.forEach(t=>{
+    if(taskEff(t)==="done") return;
+    const dl = daysLeft(t);
+    if(dl<0) out.push({t, type:"late", dl});
+    else if(dl<=30) out.push({t, type:"soon", dl});
+  });
+  return out.sort((a,b)=>a.dl-b.dl);
+}
+function renderNotif(){
+  const n = getNotifs();
+  const badge = document.getElementById("notifBadge");
+  badge.style.display = n.length? "inline-block":"none";
+  badge.textContent = n.length;
+  document.getElementById("notifList").innerHTML = n.map(x=>{
+    const pending = Object.keys(x.t.sites).filter(s=>x.t.sites[s].status!=="done");
+    return `<div class="notif ${x.type}" onclick="openDetail('${x.t.id}')">
+      <div class="n-title">${x.type==="late"?"🔴":"🟡"} ${esc(x.t.name)}</div>
+      <div class="n-sub">${x.type==="late"? "เกินกำหนดมาแล้ว "+(-x.dl)+" วัน" : "ครบกำหนดในอีก "+x.dl+" วัน"} (กำหนด ${toBE(x.t.due)}) · ศูนย์ที่ยังไม่เสร็จ: ${pending.map(esc).join(", ")||"-"}</div>
+    </div>`;
+  }).join("") || '<div class="empty">🎉 ไม่มีงานที่ต้องแจ้งเตือนในขณะนี้</div>';
+}
+
+/* ==================== EXECUTIVE SUMMARY ==================== */
+function renderExec(){
+  const counts = {done:0,doing:0,todo:0,late:0};
+  tasks.forEach(t=>counts[taskEff(t)]++);
+  const allCells = tasks.flatMap(t=>Object.keys(t.sites).map(s=>siteEff(t,s)));
+  const pct = allCells.length? Math.round(100*allCells.filter(x=>x==="done").length/allCells.length):0;
+  const today = new Date().toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"});
+  const lateList = tasks.filter(t=>taskEff(t)==="late");
+  const soonList = getNotifs().filter(x=>x.type==="soon");
+
+  const sitesInUse = [...new Set(tasks.flatMap(t=>Object.keys(t.sites)))];
+
+  document.getElementById("execArea").innerHTML = `
+    <div class="exec-head">
+      <h2>สรุปผลการดำเนินงานแผนงานด้าน SHE&En ปี ${YEAR_BE}</h2>
+      <div class="sub">ข้อมูล ณ วันที่ ${today}</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="num">${tasks.length}</div><div class="lbl">แผนงานทั้งหมด</div></div>
+      <div class="stat s-green"><div class="num">${counts.done}</div><div class="lbl">เสร็จแล้ว</div></div>
+      <div class="stat s-blue"><div class="num">${counts.doing}</div><div class="lbl">กำลังดำเนินการ</div></div>
+      <div class="stat s-red"><div class="num">${counts.late}</div><div class="lbl">เกินกำหนด</div></div>
+      <div class="stat s-green"><div class="num">${pct}%</div><div class="lbl">ความคืบหน้ารวม</div></div>
+    </div>
+    <h3 style="margin:14px 0 8px;color:var(--navy)">ตารางสถานะรายกิจกรรม × รายศูนย์</h3>
+    <div style="overflow-x:auto">
+    <table class="exec">
+      <tr><th style="text-align:left">กิจกรรม</th><th>กำหนด</th>${sitesInUse.map(s=>`<th>${esc(s)}</th>`).join("")}</tr>
+      ${tasks.map(t=>`<tr>
+        <td class="tl">${esc(t.name)}<br><span style="font-size:11px;color:var(--grey)">${esc(t.cat)}</span></td>
+        <td>${toBE(t.due)}</td>
+        ${sitesInUse.map(s=> t.sites[s]? `<td>${stChip(siteEff(t,s))}</td>` : "<td>—</td>").join("")}
+      </tr>`).join("")}
+    </table>
+    </div>
+    ${lateList.length? `<h3 style="margin:16px 0 6px;color:var(--red)">⚠ รายการที่เกินกำหนด (${lateList.length})</h3>
+      <ul style="margin-left:20px;font-size:14px">${lateList.map(t=>`<li>${esc(t.name)} — กำหนด ${toBE(t.due)}</li>`).join("")}</ul>`:""}
+    ${soonList.length? `<h3 style="margin:16px 0 6px;color:var(--amber)">⏳ ใกล้ถึงกำหนดใน 30 วัน (${soonList.length})</h3>
+      <ul style="margin-left:20px;font-size:14px">${soonList.map(x=>`<li>${esc(x.t.name)} — อีก ${x.dl} วัน</li>`).join("")}</ul>`:""}
+    <div class="exec-note">หมายเหตุ: สถานะ "เกินกำหนด" นับจากงานที่ยังไม่เสร็จเมื่อพ้นเดือนที่กำหนด · จัดทำโดยระบบติดตามแผนงาน SHE&En</div>`;
+}
+
+/* ==================== EXPORT / IMPORT ==================== */
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(tasks,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "sheen-plan-backup-"+new Date().toISOString().slice(0,10)+".json";
+  a.click();
+}
+function toast(msg){
+  let el = document.getElementById("toast");
+  if(!el){
+    el = document.createElement("div"); el.id="toast";
+    el.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;z-index:99;box-shadow:0 4px 14px rgba(0,0,0,.25)";
+    document.body.appendChild(el);
+  }
+  el.textContent = msg; el.style.display="block";
+  clearTimeout(el._t); el._t = setTimeout(()=>el.style.display="none",2500);
+}
+function importJSON(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const data = JSON.parse(r.result);
+      if(!Array.isArray(data)) throw 0;
+      tasks = data; migrate(); persist(); renderAll();
+      toast("นำเข้าข้อมูลเรียบร้อย ("+data.length+" แผนงาน)");
+    }catch(e){ toast("⚠ ไฟล์ไม่ถูกต้อง"); }
+  };
+  r.readAsText(f);
+  ev.target.value = "";
+}
+
+/* ==================== INIT ==================== */
+function renderAll(){ renderDash(); renderPlan(); renderNotif(); renderExec(); }
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{ if(e.target===o) o.classList.remove("open"); }));
+renderAll();
+persistNoSyncLoop();
+if(SHEET_API_URL){
+  pullCloud(false);
+  setInterval(()=>pullCloud(true), 30000);
+}
+function persistNoSyncLoop(){ try{ localStorage.setItem(KEY, JSON.stringify(tasks)); }catch(e){} }
+</script>
+</body>
+</html>
