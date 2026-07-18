@@ -335,7 +335,7 @@ table.exec .cat-row td{background:#eef2fc;color:var(--navy-soft);font-weight:700
    * ถ้าเว้นว่างไว้ ระบบจะเก็บข้อมูลในเครื่องตามเดิม */
 const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxLhTbMp1Y823CuCv47JWRE_tCOv8oL7ymlCSXPk9gnf9wpw5tTa1Aar3uUzujraIs/exec";
 
-const SITES = ["ศูนย์วิจัยไร่สาม","ศูนย์วิจัยหัวกุญแจ","ศูนย์วิจัยเพชรบุรี","สปป.สัตว์น้ำหาดเจ้า","ศูนย์วิจัยหาดเจ้า"];
+const SITES = ["ศูนย์วิจัยไร่สาม","ศูนย์วิจัยหัวกุญแจ","ศูนย์วิจัยเพชรบุรี","ศปป.สัตว์น้ำหาดเจ้า","ศูนย์วิจัยหาดเจ้า"];
 const STATUS = {todo:"ยังไม่เริ่ม",doing:"กำลังดำเนินการ",done:"เสร็จแล้ว"};
 const YEAR_BE = 2569;
 const KEY = "sheen-plan-v1";
@@ -391,10 +391,13 @@ async function pullCloud(silent){
       }
       tasks = d.tasks;
       if(Array.isArray(d.templates) && d.templates.length) templates = d.templates;
+      const beforeMigrate = JSON.stringify(tasks);
       migrate();
+      const changedByMigrate = JSON.stringify(tasks) !== beforeMigrate;
       try{ localStorage.setItem(KEY, JSON.stringify(tasks)); }catch(e){}
       persistTemplates();
       renderAll();
+      if(changedByMigrate){ schedulePush(); }
     }
     setSync("✓ ซิงก์แล้ว "+new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"}));
   }catch(e){ setSync("⚠ ออฟไลน์ — ใช้ข้อมูลในเครื่อง"); }
@@ -405,9 +408,16 @@ let editingId = null;
 migrate();
 
 function migrate(){
+  const RENAME = {"สปป.สัตว์น้ำหาดเจ้า":"ศปป.สัตว์น้ำหาดเจ้า"};
   tasks.forEach(t=>{
     if(!Array.isArray(t.steps)) t.steps = [];
     t.steps.forEach(sp=>{ if(sp.due===undefined) sp.due=""; if(sp.link===undefined) sp.link=""; });
+    Object.entries(RENAME).forEach(([oldName,newName])=>{
+      if(t.sites && t.sites[oldName] && !t.sites[newName]){
+        t.sites[newName] = t.sites[oldName];
+        delete t.sites[oldName];
+      }
+    });
     Object.values(t.sites||{}).forEach(st=>{ if(!st.steps) st.steps = {}; });
   });
 }
